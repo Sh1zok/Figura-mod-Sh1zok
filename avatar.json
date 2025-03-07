@@ -1,13 +1,14 @@
 {
   "name": "§b§lSh1zok",
   "description": "§f[V2.5] §3Аватар §b§lSh1zok",
-  "authors": ["Sh1zok", "§f§nLibraries", "§bEZAnims", "GSAnimBlend", "SquAPI"],
+  "authors": ["Sh1zok", "§f§nLibraries", "§bEZAnims", "GSAnimBlend", "SquAPI", "SASys", "SESys"],
   "version": "2.5",
   "color": "#3cfff0",
   "autoScripts": [
     "libraries.EZAnims",
     "libraries.GSAnimBlend",
     "libraries.SquAssets",
+    "config",
     "script_Pings",
     "script_Main",
     "script_ActionWheel",

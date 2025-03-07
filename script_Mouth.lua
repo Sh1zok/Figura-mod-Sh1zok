@@ -1,4 +1,7 @@
-local function processPCM(pcm) -- Вычисление громкости голоса для FiguraSVC(ебал этот мод в рот)
+--[[
+    Функции
+]]--
+local function processPCM(pcm) -- Вычисление громкости голоса для FiguraSVC
     local averageAmplitude = 0
     for i = 1, #pcm do
         averageAmplitude = averageAmplitude + math.abs(pcm[i])
@@ -7,9 +10,21 @@ local function processPCM(pcm) -- Вычисление громкости гол
 
     return averageAmplitude
 end
+function pings.changeMouth(texture) -- Смена текстуры рта на заданную
+    models.model.root.Body.Head.Face.Mouth:setPrimaryTexture("Custom", textures["assets.mouth." .. texture])
+end
 
-if client:isModLoaded("figextra") then -- Если есть прослойка для PlasmoVoice
+
+
+--[[
+    Интеграции
+]]--
+-- PlasmoVoice
+if client:isModLoaded("figextra") then
+    previousMouth = "0"
+    currentMouth = "0"
     voiceLevelModifier = 0
+    isMouthShouldChange = true
 
     function events.tick()
         voiceLevel = plasmovoice:getVoiceLevel(player:getUUID()) + voiceLevelModifier
@@ -26,17 +41,18 @@ if client:isModLoaded("figextra") then -- Если есть прослойка �
             currentMouth = "4"
         end
     end
-    function events.tick()
-        if (currentMouth ~= previousMouth) and isMouthShouldChange then
-            pings.changeMouth(currentMouth)
-            previousMouth = currentMouth
-        end
-    end
-elseif client:isModLoaded("figurasvc") and host:isHost() then -- Если есть прослойка для Simple Voice Chat
+end
+
+-- FiguraSVC
+if client:isModLoaded("figurasvc") and host:isHost() then
+    previousMouth = "0"
+    currentMouth = "0"
     voiceLevelModifier = 0
+    isMouthShouldChange = true
 
     events["svc.microphone"] = function(pcm)
         voiceLevel = (math.floor(processPCM(pcm)) / 100) + voiceLevelModifier
+
         if voiceLevel < 2 then
             currentMouth = "0"
         elseif voiceLevel > 2 and voiceLevel < 4 then
@@ -49,15 +65,10 @@ elseif client:isModLoaded("figurasvc") and host:isHost() then -- Если ест
             currentMouth = "4"
         end
     end
-    function events.tick()
-        if (currentMouth ~= previousMouth) and isMouthShouldChange then
-            pings.changeMouth(currentMouth)
-            previousMouth = currentMouth
-        end
-    end
 end
 
-if client:isModLoaded("figextra") or client:isModLoaded("figurasvc") then -- Если установлен FigExtra или FiguraSVC
+-- FigExtra или FiguraSVC
+if client:isModLoaded("figextra") or client:isModLoaded("figurasvc") then
     settingVoiceLevelModifier = settingsPage:newAction()
         :title("Прибавка к чувствительности голоса: 0§7\n Колёсико мыши вверх: +0.1\n Колёсико мыши вниз: -0.1\n ЛКМ: Сброс")
         :item("minecraft:silence_armor_trim_smithing_template")
@@ -89,4 +100,35 @@ if client:isModLoaded("figextra") or client:isModLoaded("figurasvc") then -- Е�
             isMouthShouldChange = settingIsMouthShouldWork:isToggled()
             sounds:playSound("block.calcite.place", player:getPos())
         end)
+
+    function events.tick()
+        if (currentMouth ~= previousMouth) and isMouthShouldChange then
+            pings.changeMouth(currentMouth)
+            previousMouth = currentMouth
+        end
+    end
+end
+
+-- Gliders
+if client:isModLoaded("vc_gliders") then
+    local isGlidingInPreviousTick = false
+    local isGlidintInPrePreviousTick = false
+    function events.tick()
+        local isGlidingInPresentTick = ((math.round(player:getVelocity().y * 100)) / 100 == -0.05)
+        if isGlidingInPresentTick then
+            if isGlidingInPresentTick and isGlidingInPreviousTick then
+                if isGlidingInPresentTick and isGlidingInPreviousTick and isGlidintInPrePreviousTick then
+                    animations.model.glider:setPlaying(true)
+                else
+                    isGlidintInPrePreviousTick = true
+                end
+            else
+                isGlidingInPreviousTick = true
+            end
+        else
+            isGlidingInPreviousTick = false
+            isGlidintInPrePreviousTick = false
+            animations.model.glider:setPlaying(false)
+        end
+    end
 end

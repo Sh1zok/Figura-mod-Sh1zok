@@ -1,13 +1,8 @@
 --[[
-    Глобальные переменные
+    Переменные
 ]]--
-previousSkin = "assets.clear_skin"
-currentSkin = "assets.clear_skin"
-previousMouth = "0"
-currentMouth = "0"
-isMouthShouldChange = true
-activeAction = {"Нет", nil}
-activeEmotion = {"Улыбка", animations.model.emotionHappy}
+local previousSkin = "assets.clear_skin"
+local currentSkin = "assets.clear_skin"
 outfitsList = {
                 {"Классический", "assets.outfits.classic", 0, 0, true, textures["assets.icons.classicOutfitIcon"]},
                 {"Повседневный 1", "assets.outfits.everyday1", 0, 0, true, textures["assets.icons.everyday1OutfitIcon"]},
@@ -28,26 +23,6 @@ capesList = {
                 {"Mojang Studios", "Mojang Studios", textures["assets.icons.capeMojangStudios"]},
                 {"Mojang Office", "Mojang Office", textures["assets.icons.capeMojangOffice"]}}
 currentCape = 1
-actionsList = {
-                {"Приветствие", animations.model.actionWave},
-                {"Указать на место", nil},
-                {"Осмотр предмета", animations.model.actionInspectItem},
-                {'Жест "Дай пять"', nil},
-                {'Танец "Руки вверх"', animations.model.actionDanceHandsUp},
-                {"Скрестить руки", animations.model.actionCrossArms},
-                {"Задумался", animations.model.actionThinking},
-                {"Отряхнулся", animations.model.actionShakeOff},
-                {"Руки на поясе", animations.model.actionBeltHands},
-                {"Отдыхает", animations.model.actionChill}}
-currentAction = 1
-emotionsList = {
-                {"Улыбка", animations.model.emotionHappy},
-                {"Скептицизм", animations.model.emotionSceptic},
-                {"Задумался", animations.model.emotionThinking},
-                {"Опечаленный", animations.model.emotionSad},
-                {"Заинтересован", animations.model.emotionInterested},
-                {"Ебанулся", animations.model.emotionCrazy}}
-currentEmotion = 1
 
 
 
@@ -63,12 +38,6 @@ vanilla_model.ELYTRA:setVisible(false)
 renderer:offsetCameraPivot(0, 0.2, 0) -- От третькго лица
 renderer:setEyeOffset(0, 0.2, 0) -- От первого лица
 
--- Горячая клавиша для действия "Приветствие"
-keybinds:newKeybind("Wave", "key.keyboard.y", false):onPress(function ()
-    activeAction = actionsList[1]
-    pings.act(true, 1)
-end)
-
 models.model.root.Body.Head.Face.Mouth:setPrimaryTexture("Custom", textures["assets.mouth.0"]) -- Устанавливаем текстуру рта
 
 -- Создание страниц колеса действий
@@ -77,7 +46,6 @@ settingsPage = action_wheel:newPage()
 action_wheel:setPage(mainPage) -- Задание активной страницы
 
 nameplate.Entity:setPos(0, 0.1, 0) -- Высота панели никнейма
-nameplate.Entity:setVisible(false) -- Видимость панели никнейма
 
 
 
@@ -136,30 +104,6 @@ function events.render()
     animations.model.crouchwalkback:setSpeed(crouchingSpeed)
     animations.model.crawling:setSpeed(crawlingSpeed)
     animations.model.falling:setSpeed(player:getVelocity().y / -3.92)
-end
-
--- Интеграция анимаций с модом Gliders
-if client:isModLoaded("vc_gliders") then
-    isGlidingInPreviousTick = false
-    isGlidintInPrePreviousTick = false
-    function events.tick()
-        isGlidingInPresentTick = ((math.round(player:getVelocity().y * 100)) / 100 == -0.05)
-        if isGlidingInPresentTick then
-            if isGlidingInPresentTick and isGlidingInPreviousTick then
-                if isGlidingInPresentTick and isGlidingInPreviousTick and isGlidintInPrePreviousTick then
-                    animations.model.glider:setPlaying(true)
-                else
-                    isGlidintInPrePreviousTick = true
-                end
-            else
-                isGlidingInPreviousTick = true
-            end
-        else
-            isGlidingInPreviousTick = false
-            isGlidintInPrePreviousTick = false
-            animations.model.glider:setPlaying(false)
-        end
-    end
 end
 
 

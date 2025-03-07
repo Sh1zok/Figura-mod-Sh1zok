@@ -1,16 +1,6 @@
 --[[
     Написание начальных динамических названий
 ]]--
--- Создание начального названия и описания кнопки выбора действия
-local manageActionTitle = "Действие: Нет\n §7Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n" -- Шапка названия и описания кнопки
-for index, value in ipairs(actionsList) do -- Перечисление пунктов за исключением "Нет"
-    if index == currentAction then -- Помечаем выбранный пункт более ярким цветом
-        manageActionTitle = manageActionTitle .. "\n §f" .. value[1]
-    else -- Остальные более тусклым
-        manageActionTitle = manageActionTitle .. "\n §3" .. value[1]
-    end
-end
-
 -- Создание начального названия и описания кнопки выбора эмоции
 local manageEmotionTitle = "Эмоция: Нет\n §7Прокручивание вниз: Следующая эмоция\n Прокручивание вверх: Предыдущая эмоция\n ЛКМ: Выбрать эмоцию\n ПКМ: Остановить эмоцию\n\n Список эмоций:\n" -- Шапка названия и описания кнопки
 for index, value in ipairs(emotionsList) do
@@ -127,144 +117,44 @@ manageOutfit = mainPage:newAction()  -- При прокручивании пер
 
         sounds:playSound("block.calcite.place", player:getPos())
     end)
-manageAction = mainPage:newAction() -- При прокручивании выбирает дейсвие, при нажатии ЛКМ воспроизводит действие
-    :title(manageActionTitle)
+actions = mainPage:newAction()
+    :title(updateActionButtonTitle())
     :item("minecraft:light")
     :hoverColor(0, 1, 1)
     :color(0, 0.75, 0.75)
     :onLeftClick(function()
-        activeAction = actionsList[currentAction]
-        if activeAction[2] ~= nil then
-            pings.act(true, currentAction)
-        else
-            if activeAction[1] == "Указать на место" then
-                pings.pointUp()
-            elseif activeAction[1] == 'Жест "Дай пять"' then
-                pings.highFive()
-            end
-        end
-
-        manageActionTitle = "Действие: " .. activeAction[1] .. "\n §7Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(actionsList) do
-            if index == currentAction then -- Помечаем выбранный пункт более ярким цветом
-                manageActionTitle = manageActionTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageActionTitle = manageActionTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageAction:title(manageActionTitle) -- Задаём новый титул кнопки
+        actionButtonPlay()
+        actions:title(updateActionButtonTitle())
+        sounds:playSound("block.calcite.place", player:getPos())
     end)
-    :onRightClick(function ()
-        if activeAction[2] ~= nil then
-            pings.act(false, currentAction)
-        end
-        
-        pings.stopSpclActs()
-
-        manageActionTitle = "Действие: Нет\n §7Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(actionsList) do
-            if index == currentAction then -- Помечаем выбранный пункт более ярким цветом
-                manageActionTitle = manageActionTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageActionTitle = manageActionTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageAction:title(manageActionTitle) -- Задаём новый титул кнопки
-
+    :onRightClick(function()
+        actionButtonStop()
+        actions:title(updateActionButtonTitle())
         sounds:playSound("block.calcite.place", player:getPos())
     end)
     :onScroll(function(dir)
-        if dir < 0 then -- При прокручивании вверх
-            if currentAction ~= #actionsList then
-                currentAction = currentAction + 1
-            else -- Переход в конец списка если выбор в начале списка
-                currentAction = 1
-            end
-        else -- При прокручивании вниз
-            if currentAction ~= 1 then
-                currentAction = currentAction - 1
-            else -- Переход в начало списка если выбор в конце списка
-                currentAction = #actionsList
-            end
-        end
-
-        manageActionTitle = "Действие: " .. activeAction[1] .. "\n §7Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(actionsList) do
-            if index == currentAction then -- Помечаем выбранный пункт более ярким цветом
-                manageActionTitle = manageActionTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageActionTitle = manageActionTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageAction:title(manageActionTitle) -- Задаём новый титул кнопки
-
+        actionButtonSelect(dir)
+        actions:title(updateActionButtonTitle())
         sounds:playSound("block.calcite.place", player:getPos())
     end)
-manageEmotion = mainPage:newAction() -- При прокручивании выбирает эмоцию, при нажатии ЛКМ воспроизводит эмоцию
-    :title(manageEmotionTitle)
+emotions = mainPage:newAction()
+    :title(updateEmotionButtonTitle())
     :item("minecraft:axolotl_bucket")
     :hoverColor(0, 1, 1)
     :color(0, 0.75, 0.75)
     :onLeftClick(function()
-        activeEmotion = emotionsList[currentEmotion]
-        pings.emotion(true, currentEmotion)
-
-        manageEmotionTitle = "Эмоция: " .. activeEmotion[1] .. "\n §7Прокручивание вниз: Следующая эмоция\n Прокручивание вверх: Предыдущая эмоция\n ЛКМ: Выбрать эмоцию\n ПКМ: Остановить эмоцию\n\n Список эмоций:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(emotionsList) do
-            if index == currentEmotion then -- Помечаем выбранный пункт более ярким цветом
-                manageEmotionTitle = manageEmotionTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageEmotionTitle = manageEmotionTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageEmotion:title(manageEmotionTitle) -- Задаём новый титул кнопки
+        emotionButtonPlay()
+        emotions:title(updateEmotionButtonTitle())
+        sounds:playSound("block.calcite.place", player:getPos())
     end)
-    :onRightClick(function ()
-        pings.emotion(false, currentEmotion)
-
-        manageEmotionTitle = "Эмоция: Нет\n §7Прокручивание вниз: Следующая эмоция\n Прокручивание вверх: Предыдущая эмоция\n ЛКМ: Выбрать эмоцию\n ПКМ: Остановить эмоцию\n\n Список эмоций:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(emotionsList) do
-            if index == currentEmotion then -- Помечаем выбранный пункт более ярким цветом
-                manageEmotionTitle = manageEmotionTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageEmotionTitle = manageEmotionTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageEmotion:title(manageEmotionTitle) -- Задаём новый титул кнопки
-
+    :onRightClick(function()
+        emotionButtonStop()
+        emotions:title(updateEmotionButtonTitle())
         sounds:playSound("block.calcite.place", player:getPos())
     end)
     :onScroll(function(dir)
-        if dir < 0 then -- При прокручивании вверх
-            if currentEmotion ~= #emotionsList then
-                currentEmotion = currentEmotion + 1
-            else -- Переход в конец списка если выбор в начале списка
-                currentEmotion = 1
-            end
-        else -- При прокручивании вниз
-            if currentEmotion ~= 1 then
-                currentEmotion = currentEmotion - 1
-            else -- Переход в начало списка если выбор в конце списка
-                currentEmotion = #emotionsList
-            end
-        end
-
-        manageEmotionTitle = "Эмоция: " .. activeEmotion[1] .. "\n §7Прокручивание вниз: Следующая эмоция\n Прокручивание вверх: Предыдущая эмоция\n ЛКМ: Выбрать эмоцию\n ПКМ: Остановить эмоцию\n\n Список эмоций:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(emotionsList) do
-            if index == currentEmotion then -- Помечаем выбранный пункт более ярким цветом
-                manageEmotionTitle = manageEmotionTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageEmotionTitle = manageEmotionTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageEmotion:title(manageEmotionTitle) -- Задаём новый титул кнопки
-
+        emotionButtonSelect(dir)
+        emotions:title(updateEmotionButtonTitle())
         sounds:playSound("block.calcite.place", player:getPos())
     end)
 
@@ -290,6 +180,7 @@ settingToggleNameplateVisibility = settingsPage:newAction() -- При нажат
     :hoverColor(1, 1, 1)
     :item("minecraft:book")
     :toggleItem("minecraft:enchanted_book")
+    :toggled(true)
     :onToggle(function()
         pings.nameplateVisibility(settingToggleNameplateVisibility:isToggled())
         if settingToggleNameplateVisibility:isToggled() then
