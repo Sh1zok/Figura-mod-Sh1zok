@@ -15,14 +15,14 @@ actionButtonCommonColor = ""
 actionButtonAccentColor = ""
 actionButtonTitle = ""
 actionButtonDescription = ""
-selectedAction = 1 -- Выбор действия
-activeAction = {"Нет", nil} -- Активное действие
+local selectedAction = 1 -- Выбор действия
+local activeAction = {"Нет", nil} -- Активное действие
 
 local stopPointUp = true
 local stopHighFive = true
 local highFiveCheck = false
 
-handParticle = particles["sonic_boom"]
+local handParticle = particles["sonic_boom"]
 handParticle:setScale(1)
 
 -- Функция для остоновки всех действий

@@ -1,8 +1,8 @@
 {
   "name": "§b§lSh1zok",
-  "description": "§f[V2.5] §3Аватар §b§lSh1zok",
-  "authors": ["Sh1zok", "§f§nLibraries", "§bEZAnims", "GSAnimBlend", "SquAPI", "SASys", "SESys"],
-  "version": "2.5",
+  "description": "§f[V3.0] §3Аватар §b§lSh1zok",
+  "authors": ["Sh1zok", "§f§nLibraries", "§bEZAnims", "GSAnimBlend", "SquAPI", "SASys", "SESys", "SCSys", "SOSys"],
+  "version": "3.0",
   "color": "#3cfff0",
   "autoScripts": [
     "libraries.EZAnims",

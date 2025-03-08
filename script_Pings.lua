@@ -17,38 +17,6 @@ function pings.changeSkin(textureName) -- Смена текстуры кожи �
 
     models.model.root.Body.Head.Face.Mouth:setPrimaryTexture("Custom", textures["assets.mouth." .. currentMouth])
 end
-function pings.setOutfit(textureName, offset12, offset3, HeadSecond) -- Смена текстур наряда на заданную, регулировка высоты шляпы, переключение видимости второя слова головы
-    models.model.root.Body.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.RightArm.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.RightArm.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.RightArm.RightABottom.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.RightArm.RightABottom.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.LeftArm.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.LeftArm.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.LeftArm.LeftABottom.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.LeftArm.LeftABottom.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.RightLeg.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.RightLeg.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.RightLeg.RightLBottom.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.RightLeg.RightLBottom.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.LeftLeg.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.LeftLeg.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.LeftLeg.LeftLBottom.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.LeftLeg.LeftLBottom.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.Outfit:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.OutfitSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.OutfitThird:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.Outfit:setPos(0, offset12, 0)
-    models.model.root.Body.Head.OutfitSecond:setPos(0, offset12, 0)
-    models.model.root.Body.Head.OutfitThird:setPos(0, offset3, 0)
-
-    models.model.root.Body.Head.HeadSecond:setVisible(HeadSecond)
-end
-function pings.setCape(textureName) -- Смена текстур плаща и элитр на заданные
-    models.model.root.Body.Cape:setPrimaryTexture("Custom", textures["assets.capes." .. textureName])
-    models.model.root.Body.Elytra:setPrimaryTexture("Custom", textures["assets.capes." .. textureName])
-end
 
 
 

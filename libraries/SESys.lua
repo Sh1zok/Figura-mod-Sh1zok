@@ -14,8 +14,8 @@ emotionButtonCommonColor = ""
 emotionButtonAccentColor = ""
 emotionButtonTitle = ""
 emotionButtonDescription = ""
-selectedEmotion = 1 -- Выбор эмоции
-activeEmotion = {"Нет", nil} -- Активная эмоция
+local selectedEmotion = 1 -- Выбор эмоции
+local activeEmotion = {"Нет", nil} -- Активная эмоция
 
 -- Функция для остоновки всех эмоций
 function stopAllEmotions()
@@ -33,7 +33,7 @@ function updateEmotionButtonTitle()
 
     -- Список эмоций
     for index, value in ipairs(emotionsList) do
-        if index == selectedEmotion then -- Выделение выбираемого действия акцентным цветом
+        if index == selectedEmotion then -- Выделение выбираемой эмоции акцентным цветом
             title = title .. "\n " .. emotionButtonAccentColor .. value[1]
         else -- Остальные более тусклым
             title = title .. "\n " .. emotionButtonCommonColor .. value[1]
@@ -57,7 +57,7 @@ function pings.playEmotion(selection)
     activeEmotion[2]:play() -- Проигрывание активной эмоции
 end
 
--- Пинг останавливающий действие
+-- Пинг останавливающий эмоцию
 function pings.stopEmotion()
     stopAllEmotions()
 

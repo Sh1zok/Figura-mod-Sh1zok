@@ -3,26 +3,6 @@
 ]]--
 local previousSkin = "assets.clear_skin"
 local currentSkin = "assets.clear_skin"
-outfitsList = {
-                {"Классический", "assets.outfits.classic", 0, 0, true, textures["assets.icons.classicOutfitIcon"]},
-                {"Повседневный 1", "assets.outfits.everyday1", 0, 0, true, textures["assets.icons.everyday1OutfitIcon"]},
-                {"Современный 1", "assets.outfits.sh1zok", 0, 0, true, textures["assets.icons.sh1zokOutfitIcon"]},
-                {"Современный 2", "assets.outfits.modern", 1, 0, false, textures["assets.icons.modernOutfitIcon"]},
-                {"Пиратский", "assets.outfits.pirate", 1, 0, false, textures["assets.icons.pirateOutfitIcon"]},
-                {"Зимний", "assets.outfits.winter", 1, 0, false, textures["assets.icons.winterOutfitIcon"]},
-                {'"Детектив"', "assets.outfits.detective", 0, 0, false, textures["assets.icons.detectiveOutfitIcon"]},
-                {"Оффициальный белый", "assets.outfits.officialWhite", 0, 0, true, textures["assets.icons.officialWhiteOutfitIcon"]},
-                {"Оффициальный чёрный", "assets.outfits.officialBlack", 0, 0, true, textures["assets.icons.officialBlackOutfitIcon"]}}
-currentOutfit = 1
-capesList = {
-                {"Без плаща", "cape_default", textures["assets.icons.capeDefault"]},
-                {"15th Anniversary", "15th Anniversary", textures["assets.icons.cape15thAnniversary"]},
-                {"Follower's", "Follower's", textures["assets.icons.capeFollower's"]},
-                {"Purple Heart", "Purple Heart", textures["assets.icons.capePurpleHeart"]},
-                {"MCC 15th Year", "MCC 15th Year", textures["assets.icons.capeMCC15thYear"]},
-                {"Mojang Studios", "Mojang Studios", textures["assets.icons.capeMojangStudios"]},
-                {"Mojang Office", "Mojang Office", textures["assets.icons.capeMojangOffice"]}}
-currentCape = 1
 
 
 

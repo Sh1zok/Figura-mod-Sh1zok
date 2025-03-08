@@ -1,39 +1,4 @@
 --[[
-    Написание начальных динамических названий
-]]--
--- Создание начального названия и описания кнопки выбора эмоции
-local manageEmotionTitle = "Эмоция: Нет\n §7Прокручивание вниз: Следующая эмоция\n Прокручивание вверх: Предыдущая эмоция\n ЛКМ: Выбрать эмоцию\n ПКМ: Остановить эмоцию\n\n Список эмоций:\n" -- Шапка названия и описания кнопки
-for index, value in ipairs(emotionsList) do
-    if index == currentEmotion then -- Помечаем выбранный пункт более ярким цветом
-        manageEmotionTitle = manageEmotionTitle .. "\n §f" .. value[1]
-    else -- Остальные более тусклым
-        manageEmotionTitle = manageEmotionTitle .. "\n §3" .. value[1]
-    end
-end
-
--- Создание начального названия и описания кнопки выбора плаща
-local manageCapeTitle = "Плащ: Без плаща\n §7Прокручивание вниз: Следующий плащ\n Прокручивание вверх: Предыдущий плащ\n\n Список плащей:\n" -- Шапка названия и описания кнопки
-for index, value in ipairs(capesList) do -- Перечисление пунктов
-    if index == currentCape then -- Помечаем выбранный пункт более ярким цветом
-        manageCapeTitle = manageCapeTitle .. "\n §f" .. value[1]
-    else -- Остальные более тусклым
-        manageCapeTitle = manageCapeTitle .. "\n §3" .. value[1]
-    end
-end
-
--- Создание начального названия и описания кнопки выбора наряда
-local manageOutfitTitle = "Наряд: Классический\n §7Прокручивание вниз: Следующий наряд\n Прокручивание вверх: Предыдущий наряд\n\n Список нарядов:\n" -- Шапка названия и описания кнопки
-for index, value in ipairs(outfitsList) do -- Перечисление пунктов
-    if index == currentOutfit then -- Помечаем выбранный пункт более ярким цветом
-        manageOutfitTitle = manageOutfitTitle .. "\n §f" .. value[1]
-    else -- Остальные более тусклым
-        manageOutfitTitle = manageOutfitTitle .. "\n §3" .. value[1]
-    end
-end
-
-
-
---[[
     Кнопки главной страницы
 ]]--
 goToSettingsPage = mainPage:newAction() -- При нажатии ведёт на страницу настроек
@@ -45,76 +10,26 @@ goToSettingsPage = mainPage:newAction() -- При нажатии ведёт на
         action_wheel:setPage(settingsPage)
         sounds:playSound("item.axe.strip", player:getPos())
     end)
-manageCape = mainPage:newAction() -- При прокручивании переключает плащи
-    :title(manageCapeTitle)
-    :setTexture(capesList[currentCape][3]) -- Начальная текстура кнопки
+capes = mainPage:newAction() -- При прокручивании переключает плащи
+    :title(updateCapeButtonTitle())
+    :setTexture(updateCapeButtonTexture()) -- Начальная текстура кнопки
     :hoverColor(0, 1, 1)
     :color(0, 0.75, 0.75)
     :onScroll(function(dir)
-        if dir < 0 then -- При прокручивании вверх
-            if currentCape ~= #capesList then
-                currentCape = currentCape + 1
-            else -- Переход в конец списка если выбор в начале списка
-                currentCape = 1
-            end
-        else -- При прокручивании вниз
-            if currentCape ~= 1 then
-                currentCape = currentCape - 1
-            else -- Переход в начало списка если выбор в конце списка
-                currentCape = #capesList
-            end
-        end
-
-        manageCapeTitle = "Плащ: " .. capesList[currentCape][1] .. "\n §7Прокручивание вниз: Следующий плащ\n Прокручивание вверх: Предыдущий плащ\n\n Список плащей:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(capesList) do -- Перечисление пунктов
-            if index == currentCape then -- Помечаем выбранный пункт более ярким цветом
-                manageCapeTitle = manageCapeTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageCapeTitle = manageCapeTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageCape:title(manageCapeTitle) -- Задаём новый титул кнопки
-        manageCape:setTexture(capesList[currentCape][3]) -- Задаём новую текстуру кнопки
-
-        pings.setCape(capesList[currentCape][2]) -- Меняем плащ на заданный
-
+        capeButtonSelect(dir)
+        capes:title(updateCapeButtonTitle())
+        capes:setTexture(updateCapeButtonTexture())
         sounds:playSound("block.calcite.place", player:getPos())
     end)
-manageOutfit = mainPage:newAction()  -- При прокручивании переключает наряды
-    :setTitle(manageOutfitTitle)
-    :setTexture(outfitsList[currentOutfit][6]) -- Начальная текстура кнопки
+outfits = mainPage:newAction()  -- При прокручивании переключает наряды
+    :setTitle(updateOutfitButtonTitle())
+    :setTexture(updateOutfitButtonTexture()) -- Начальная текстура кнопки
     :hoverColor(0, 1, 1)
     :color(0, 0.75, 0.75)
     :onScroll(function(dir)
-        if dir < 0 then -- При прокручивании вверх
-            if currentOutfit ~= #outfitsList then
-                currentOutfit = currentOutfit + 1
-            else -- Переход в конец списка если выбор в начале списка
-                currentOutfit = 1
-            end
-        else -- При прокручивании вниз
-            if currentOutfit ~= 1 then
-                currentOutfit = currentOutfit - 1
-            else -- Переход в начало списка если выбор в конце списка
-                currentOutfit = #outfitsList
-            end
-        end
-
-        manageOutfitTitle = "Наряд: " .. outfitsList[currentOutfit][1] .. "\n §7Прокручивание вниз: Следующий наряд\n Прокручивание вверх: Предыдущий наряд\n\n Список нарядов:\n" -- Шапка названия и описания кнопки
-        for index, value in ipairs(outfitsList) do -- Перечисление пунктов
-            if index == currentOutfit then -- Помечаем выбранный пункт более ярким цветом
-                manageOutfitTitle = manageOutfitTitle .. "\n §f" .. value[1]
-            else -- Остальные более тусклым
-                manageOutfitTitle = manageOutfitTitle .. "\n §3" .. value[1]
-            end
-        end
-
-        manageOutfit:title(manageOutfitTitle) -- Задаём новый титул кнопки
-        manageOutfit:setTexture(outfitsList[currentOutfit][6]) -- Задаём новую текстуру кнопки
-
-        pings.setOutfit(outfitsList[currentOutfit][2], outfitsList[currentOutfit][3], outfitsList[currentOutfit][4], outfitsList[currentOutfit][5]) -- Меняем наряд на заданный
-
+        outfitButtonSelect(dir)
+        outfits:title(updateOutfitButtonTitle())
+        outfits:setTexture(updateOutfitButtonTexture())
         sounds:playSound("block.calcite.place", player:getPos())
     end)
 actions = mainPage:newAction()
