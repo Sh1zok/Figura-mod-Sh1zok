@@ -86,7 +86,8 @@ outfitsList = {
     {"Зимний", "assets.outfits.winter", "assets.icons.winterOutfitIcon", 1, false},
     {'"Детектив"', "assets.outfits.detective", "assets.icons.detectiveOutfitIcon", 0, false},
     {"Оффициальный белый", "assets.outfits.officialWhite", "assets.icons.officialWhiteOutfitIcon", 0, true},
-    {"Оффициальный чёрный", "assets.outfits.officialBlack", "assets.icons.officialBlackOutfitIcon", 0, true}
+    {"Оффициальный чёрный", "assets.outfits.officialBlack", "assets.icons.officialBlackOutfitIcon", 0, true},
+    {"Садовый", "assets.outfits.gardenGreen", "assets.icons.gardenGreenOutfitIcon", 0, true}
 }
 outfitModelParts = {
     models.model.root.Body.Outfit,
