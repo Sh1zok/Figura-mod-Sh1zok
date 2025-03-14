@@ -34,7 +34,7 @@ nameplate.Entity:setPos(0, 0.1, 0) -- Высота панели никнейма
 ]]--
 -- SquAPI
 local squapi = require("libraries.SquAPI") -- Подключение SquAPI
-squapi.smoothHead:new({models.model.root.Body.Head, models.model.root.Body}, {0.7, 0.3}, nil, 1, false) -- Гладкий поворот головы
+squapi.smoothHead:new({models.model.root.Body.Head, models.model.root.Body}, {0.5, 0.3}, nil, 1, false) -- Гладкий поворот головы
 squapi.eye:new(models.model.root.Body.Head.Face.Pupils.LeftPupil, 0.125, 0.375, 0.5, 0.5) -- Настройка левого глаза
 squapi.eye:new(models.model.root.Body.Head.Face.Pupils.RightPupil, 0.375, 0.125, 0.5, 0.5) -- -- Настройка правого глаза
 squapi.randimation:new(animations.model.blink, 60, true) -- Настройка анимации моргания
