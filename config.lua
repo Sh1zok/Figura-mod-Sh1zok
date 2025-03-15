@@ -23,9 +23,9 @@ stopingAnimsList = {
 }
 actionsList = {
     {"Приветствие", animations.model.actionWave},
-    {"Указать на место", nil},
+    {"Указать на место", animations.model.actionPointUp},
     {"Осмотр предмета", animations.model.actionInspectItem},
-    {'Жест "Дай пять"', nil},
+    {'Жест "Дай пять"', animations.model.actionHighFiveBegin},
     {'Танец "Руки вверх"', animations.model.actionDanceHandsUp},
     {"Скрестить руки", animations.model.actionCrossArms},
     {"Задумался", animations.model.actionThinking},
@@ -36,7 +36,8 @@ actionButtonCommonColor = "§3"
 actionButtonAccentColor = "§f"
 actionButtonTitle = "Действие"
 actionButtonDescription = "Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n"
-
+prioritizeActionAnimations(3)
+blendActionAnimations(7.5)
 
 
 require("libraries.SESys")
@@ -122,3 +123,44 @@ outfitButtonCommonColor = "§3"
 outfitButtonAccentColor = "§f"
 outfitButtonTitle = "Наряд"
 outfitButtonDescription = "Прокручивание вниз: Следующий наряд\n Прокручивание вверх: Предыдущий наряд\n\n Список нарядов:\n"
+
+
+
+--[[
+    Специальные действия, переменные
+]]--
+local highFiveCheck = false
+
+
+
+--[[
+    Специальные действия, функции
+]]--
+function events.render()
+    if activeAction[1] == "Указать на место" then
+        models.model.root.Body.RightArm:setRot((vanilla_model.HEAD:getOriginRot() + 180) % 360 - 180)
+    else
+        models.model.root.Body.RightArm:setRot(0, 0, 0)
+    end
+end
+
+function events.render(delta)
+    if activeAction[1] == 'Жест "Дай пять"' then
+        local hand_pos = models.model.root.Body.RightArm.RightABottom.RightItemPivot:partToWorldMatrix():apply()
+        for _, player in pairs(world:getPlayers()) do
+            local pos = player:getPos(delta) + vec(0, player:getEyeHeight(delta), 0)
+            local dist = (hand_pos - pos):length()
+            pos = pos + player:getLookDir(delta)*dist
+            if player:isSwingingArm() and (hand_pos - pos):length() <= 0.3 then
+                highFiveCheck = true
+            end
+        end
+        if highFiveCheck then
+            animations.model.actionHighFiveBegin:stop()
+            animations.model.actionHighFiveEnd:play()
+            sounds:playSound("block.froglight.step", player:getPos())
+
+            highFiveCheck = false
+        end
+    end
+end

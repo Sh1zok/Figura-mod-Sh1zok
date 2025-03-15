@@ -1,7 +1,7 @@
 --[[
     ■■■■
     ■  ■ Sh1zok's Actions System
-    ■■■  v1.5
+    ■■■  v2.0
 ]]--
 
 
@@ -16,29 +16,47 @@ actionButtonAccentColor = ""
 actionButtonTitle = ""
 actionButtonDescription = ""
 local selectedAction = 1 -- Выбор действия
-local activeAction = {"Нет", nil} -- Активное действие
-
-local stopPointUp = true
-local stopHighFive = true
-local highFiveCheck = false
-
-local handParticle = particles["sonic_boom"]
-handParticle:setScale(1)
+activeAction = {"Нет", nil} -- Активное действие
 
 -- Функция для остоновки всех действий
 function stopAllActions()
-    -- Останавливаем стандартные действия
-    for _, value in ipairs(actionsList) do
-        if value[2] ~= nil then
-            value[2]:stop()
+    for _, action in ipairs(actionsList) do
+        if action[2] ~= nil then
+            action[2]:stop()
         end
     end
 
-    -- Останавливаем специальные действия
-    stopPointUp = true
-    stopHighFive = true
-    animations.model.actionHighFiveBegin:stop()
-    animations.model.actionHighFiveEnd:stop()
+    activeAction = {"Нет", nil}
+end
+
+-- Функция для задания приоритетов анимациям действий
+function prioritizeActionAnimations(priorityValue)
+    for _, action in ipairs(actionsList) do
+        if action[2] ~= nil then
+            action[2]:setPriority(priorityValue)
+        end
+    end
+end
+
+-- Функция для задания интерполяции анимаций дейсвий если среди библиотек есть GSAnimBlend
+function blendActionAnimations(blendValue)
+    -- Находим GSAnimBlend
+    local GSAnimBlendIsHere = false
+    for _, key in ipairs(listFiles(nil,true)) do
+        if key:find("GSAnimBlend$") then
+            GSAnimBlendIsHere = true
+            break
+        end
+    end
+
+    -- Если GSAnimBlend найден, то устанавливаем анимациям действий интерполяцию
+    if GSAnimBlendIsHere then
+        for _, action in ipairs(actionsList) do
+            if action[2] ~= nil then
+                action[2]:setBlendTime(blendValue)
+            end
+        end
+    end
 end
 
 -- Функция формирующая титул кнопки
@@ -58,59 +76,12 @@ function updateActionButtonTitle()
     return(title)
 end
 
-
-
---[[
-    Проверки
-]]--
 -- Проверяем каждый тик проигрывание несовместимых с действиями анимациями
 function events.tick()
     for _, value in ipairs(stopingAnimsList) do
         if value:isPlaying() then
             stopAllActions()
         end
-    end
-end
-
--- Выставлет руку в сторону направления взгляда если stopPointUp = false
-function events.render()
-    if not stopPointUp then
-        local headrotation = (vanilla_model.HEAD:getOriginRot() + 180) % 360 - 180
-        models.model.root.Body.RightArm:setRot(headrotation)
-    else 
-        models.model.root.Body.RightArm:setRot(0, 0, 0)
-        animations.model.actionPointUp:stop()
-        stopPointUp = true
-    end
-end
-
--- Действие "Дай пять"
-function events.render(delta)
-    if not stopHighFive then
-        local hand_pos = models.model.root.Body.RightArm.RightABottom.RightItemPivot:partToWorldMatrix():apply()
-        handParticle:setPos(hand_pos)
-        for _, player in pairs(world:getPlayers()) do
-            local pos = player:getPos(delta) + vec(0, player:getEyeHeight(delta), 0)
-            local dist = (hand_pos - pos):length()
-            pos = pos + player:getLookDir(delta)*dist
-            if player:isSwingingArm() and (hand_pos - pos):length() <= 0.3 then
-                highFiveCheck = true
-            end
-        end
-        if handParticle:isAlive() == false then
-            handParticle = particles["sonic_boom"]
-            handParticle:setScale(1)
-            handParticle:spawn()
-        end
-    end
-    if highFiveCheck and not stopHighFive then
-        animations.model.actionHighFiveBegin:stop()
-        animations.model.actionHighFiveEnd:play()
-
-        highFiveCheck = false
-        stopHighFive = true
-
-        sounds:playSound("block.froglight.step", player:getPos())
     end
 end
 
@@ -125,38 +96,14 @@ function pings.playAction(selection)
 
     activeAction = actionsList[selection] -- Выбор активного действия
 
-    activeAction[2]:play() -- Проигрывание активного действия
+    if activeAction[2] ~= nil then
+        activeAction[2]:play() -- Проигрывание активного действия
+    end
 end
 
 -- Пинг останавливающий действие
 function pings.stopAction()
     stopAllActions()
-
-    activeAction = {"Нет", nil}
-end
-
--- Пинг для специального действия "Указать на место"
-function pings.pointUp()
-    stopAllActions() -- Остановка всех действий
-
-    activeAction = actionsList[selection] -- Выбор активного действия
-
-    stopPointUp = false
-    animations.model.actionPointUp:play()
-end
-
--- Пинг для специального действия "Дай пять!"
-function pings.highFive()
-    stopAllActions() -- Остановка всех действий
-
-    activeAction = actionsList[selection] -- Выбор активного действия
-
-    stopHighFive = false
-    highFiveCheck = false
-
-    animations.model.actionHighFiveBegin:play()
-
-    handParticle:spawn()
 end
 
 
@@ -166,17 +113,7 @@ end
 ]]--
 -- Функция для активации действий
 function actionButtonPlay()
-    -- Активируем действие
-    if actionsList[selectedAction][2] ~= nil then
-        pings.playAction(selectedAction) -- В этом случае активируется стандартное действие
-    else
-        -- В этом случае активируется специальное действие
-        if actionsList[selectedAction][1] == "Указать на место" then
-            pings.pointUp()
-        elseif actionsList[selectedAction][1] == 'Жест "Дай пять"' then
-            pings.highFive()
-        end
-    end
+    pings.playAction(selectedAction) -- Активируем действие
 end
 
 -- Функция для остановки действий
