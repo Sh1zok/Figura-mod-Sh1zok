@@ -1,7 +1,7 @@
 --[[
     ■■■■■
     ■   ■ Sh1zok's Emotions System
-    ■■■■  v1.5
+    ■■■■  v2.0
 ]]--
 
 
@@ -15,13 +15,36 @@ emotionButtonAccentColor = ""
 emotionButtonTitle = ""
 emotionButtonDescription = ""
 local selectedEmotion = 1 -- Выбор эмоции
-local activeEmotion = {"Нет", nil} -- Активная эмоция
+activeEmotion = {"Нет", nil} -- Активная эмоция
 
 -- Функция для остоновки всех эмоций
 function stopAllEmotions()
     for _, value in ipairs(emotionsList) do
         if value[2] ~= nil then
             value[2]:stop()
+        end
+    end
+
+    activeEmotion = {"Нет", nil}
+end
+
+-- Функция для задания интерполяции анимаций эмоций если среди библиотек есть GSAnimBlend
+function blendEmotionAnimations(blendValue)
+    -- Находим GSAnimBlend
+    local GSAnimBlendIsHere = false
+    for _, key in ipairs(listFiles(nil,true)) do
+        if key:find("GSAnimBlend$") then
+            GSAnimBlendIsHere = true
+            break
+        end
+    end
+
+    -- Если GSAnimBlend найден, то устанавливаем анимациям эмоций интерполяцию
+    if GSAnimBlendIsHere then
+        for _, emotion in ipairs(emotionsList) do
+            if emotion[2] ~= nil then
+                emotion[2]:setBlendTime(blendValue)
+            end
         end
     end
 end
@@ -54,14 +77,14 @@ function pings.playEmotion(selection)
 
     activeEmotion = emotionsList[selection] -- Выбор активной эмоции
 
-    activeEmotion[2]:play() -- Проигрывание активной эмоции
+    if activeEmotion[2] ~= nil then
+        activeEmotion[2]:play() -- Проигрывание активной эмоции
+    end
 end
 
 -- Пинг останавливающий эмоцию
 function pings.stopEmotion()
     stopAllEmotions()
-
-    activeEmotion = {"Нет", nil}
 end
 
 
