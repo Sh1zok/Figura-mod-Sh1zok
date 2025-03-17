@@ -1,7 +1,7 @@
 --[[
     ■■■■
     ■  ■ Sh1zok's Actions System
-    ■■■  v2.0
+    ■■■  v2.1
 ]]--
 
 
@@ -11,12 +11,13 @@
 ]]--
 stopingAnimsList = {} -- Список анимаций несовместимых с действиями
 actionsList = {} -- Список действий
-actionButtonCommonColor = ""
-actionButtonAccentColor = ""
-actionButtonTitle = ""
-actionButtonDescription = ""
+actionButtonCommonColor = "§8"
+actionButtonAccentColor = "§f"
+actionButtonTitle = "Action"
+actionButtonDescription = "Scroll down: Next action\n Scroll up: Previous action\n LMB: Play action\n RMB: Stop action\n\n Actions list:\n"
 local selectedAction = 1 -- Выбор действия
 activeAction = {"Нет", nil} -- Активное действие
+actionsListDescriptionSize = 5
 
 -- Функция для остоновки всех действий
 function stopAllActions()
@@ -38,7 +39,7 @@ function prioritizeActionAnimations(priorityValue)
     end
 end
 
--- Функция для задания интерполяции анимаций дейсвий если среди библиотек есть GSAnimBlend
+-- Функция для задания интерполяции анимаций действий если среди библиотек есть GSAnimBlend
 function blendActionAnimations(blendValue)
     -- Находим GSAnimBlend
     local GSAnimBlendIsHere = false
@@ -64,12 +65,26 @@ function updateActionButtonTitle()
     -- Название кнопки и её описание
     local title = actionButtonTitle .. ": " .. actionsList[selectedAction][1] .. "\n §7" .. actionButtonDescription
 
+    -- Определение нижнего и вернего индекса списка действий
+    local descriptionListTop = selectedAction - math.floor(actionsListDescriptionSize / 2)
+    local descriptionListBottom = selectedAction + math.floor(actionsListDescriptionSize / 2)
+    if descriptionListTop < 1 then
+        descriptionListTop = 1 
+        descriptionListBottom = actionsListDescriptionSize
+    end
+    if descriptionListBottom > #actionsList then
+        descriptionListBottom = descriptionListBottom - (descriptionListBottom - #actionsList) + 1
+        descriptionListTop = descriptionListBottom - actionsListDescriptionSize
+    end
+
     -- Список действий
     for index, value in ipairs(actionsList) do
-        if index == selectedAction then -- Выделение выбираемого действия акцентным цветом
-            title = title .. "\n " .. actionButtonAccentColor .. value[1]
-        else -- Остальные более тусклым
-            title = title .. "\n " .. actionButtonCommonColor .. value[1]
+        if index >= descriptionListTop and index <= descriptionListBottom then
+            if index == selectedAction then -- Выделение выбираемого действия акцентным цветом
+                title = title .. "\n " .. actionButtonAccentColor .. index .. ". " .. value[1]
+            else -- Остальные более тусклым
+                title = title .. "\n " .. actionButtonCommonColor .. index .. ". " .. value[1]
+            end
         end
     end
 

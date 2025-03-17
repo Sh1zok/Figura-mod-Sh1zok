@@ -35,8 +35,8 @@ nameplate.Entity:setPos(0, 0.1, 0) -- Высота панели никнейма
 -- SquAPI
 local squapi = require("libraries.SquAPI") -- Подключение SquAPI
 squapi.smoothHead:new({models.model.root.Body.Head, models.model.root.Body}, {0.45, 0.3}, nil, 1, false) -- Гладкий поворот головы
-squapi.eye:new(models.model.root.Body.Head.Face.Pupils.LeftPupil, 0.125, 0.375, 0.5, 0.5) -- Настройка левого глаза
-squapi.eye:new(models.model.root.Body.Head.Face.Pupils.RightPupil, 0.375, 0.125, 0.5, 0.5) -- -- Настройка правого глаза
+squapi.eye:new(models.model.root.Body.Head.Face.Pupils.LeftPupil, 0.0625, 0.175, 0.25, 0.25) -- Настройка левого глаза
+squapi.eye:new(models.model.root.Body.Head.Face.Pupils.RightPupil, 0.175, 0.0625, 0.25, 0.25) -- -- Настройка правого глаза
 squapi.randimation:new(animations.model.blink, 60, true) -- Настройка анимации моргания
 
 -- Настройка анимаций
@@ -111,18 +111,6 @@ function events.render() -- Определение момента показа �
         else -- Основная рука - правая
             renderer:setRenderLeftArm(false)
         end
-    end
-end
-
-function events.tick() -- Постановка камеры на плечо
-    if settingCameraShouldBeOnShoulder:getTitle() == "Снять камеру с плеча" and not renderer:isFirstPerson() then
-        if renderer:isCameraBackwards() then
-            renderer:setCameraPos(-1, 0, 0)
-        else
-            renderer:setCameraPos(-1, 0, -2.5)
-        end
-    else
-        renderer:setCameraPos(0, 0, 0)
     end
 end
 

@@ -121,18 +121,3 @@ settingToggleArmorVisibility = settingsPage:newAction() -- При нажатии
             sounds:playSound("block.beacon.deactivate", player:getPos())
         end
     end)
-settingCameraShouldBeOnShoulder = settingsPage:newAction() -- При нажатии переключает перенос камеры от третьего лица на плечо
-    :title("Поместить камеру на плечо")
-    :toggleTitle("Снять камеру с плеча")
-    :color(0.75, 0, 0)
-    :toggleColor(0, 0.75, 0)
-    :hoverColor(1, 1, 1)
-    :item("minecraft:spyglass")
-    :toggled(true)
-    :onToggle(function()
-        if settingCameraShouldBeOnShoulder:isToggled() then
-            sounds:playSound("block.beacon.activate", player:getPos())
-        else
-            sounds:playSound("block.beacon.deactivate", player:getPos())
-        end
-    end)

@@ -36,23 +36,27 @@ actionButtonCommonColor = "§3"
 actionButtonAccentColor = "§f"
 actionButtonTitle = "Действие"
 actionButtonDescription = "Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n"
+actionsListDescriptionSize = 5
 prioritizeActionAnimations(3)
 blendActionAnimations(7.5)
+
 
 
 require("libraries.SESys")
 emotionsList = {
     {"Улыбка", animations.model.emotionHappy},
-    {"Скептицизм", animations.model.emotionSceptic},
+    {"Скептик", animations.model.emotionSceptic},
     {"Задумался", animations.model.emotionThinking},
-    {"Опечаленный", animations.model.emotionSad},
-    {"Заинтересован", animations.model.emotionInterested},
-    {"Ебанулся", animations.model.emotionCrazy}
+    {"Печаль", animations.model.emotionSad},
+    {"Интерес", animations.model.emotionInterested},
+    {"Сумасшедший", animations.model.emotionCrazy},
+    {"Шок", animations.model.emotionScared}
 }
 emotionButtonCommonColor = "§3"
 emotionButtonAccentColor = "§f"
 emotionButtonTitle = "Эмоция"
 emotionButtonDescription = "Прокручивание вниз: Следующая эмоция\n Прокручивание вверх: Предыдущая эмоция\n ЛКМ: Выбрать эмоцию\n ПКМ: Остановить эмоцию\n\n Список эмоций:\n"
+blendEmotionAnimations(2.5)
 
 
 

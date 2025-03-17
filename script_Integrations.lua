@@ -88,18 +88,6 @@ if client:isModLoaded("figextra") or client:isModLoaded("figurasvc") then
             settingVoiceLevelModifier:title("Прибавка к чувствительности голоса: " .. voiceLevelModifier .. "§7\n Колёсико мыши вверх: +0.1\n Колёсико мыши вниз: -0.1\n ЛКМ: Сброс")
             sounds:playSound("block.calcite.place", player:getPos())
         end)
-    settingIsMouthShouldWork = settingsPage:newAction()
-        :title("Визуализация голоса")
-        :color(0.75, 0, 0)
-        :toggleColor(0, 0.75, 0)
-        :hoverColor(1, 1, 1)
-        :item("minecraft:observer")
-        :toggleItem("minecraft:dispenser")
-        :toggled(true)
-        :onToggle(function()
-            isMouthShouldChange = settingIsMouthShouldWork:isToggled()
-            sounds:playSound("block.calcite.place", player:getPos())
-        end)
 
     function events.tick()
         if (currentMouth ~= previousMouth) and isMouthShouldChange then
