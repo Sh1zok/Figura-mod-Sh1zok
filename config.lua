@@ -12,7 +12,6 @@ stopingAnimsList = {
     animations.model.spyglassL,
     animations.model.mineR,
     animations.model.mineL,
-    animations.model.sprinting,
     animations.model.crouchwalk,
     animations.model.crouching,
     animations.model.crouchwalkback,
@@ -24,13 +23,16 @@ stopingAnimsList = {
 actionsList = {
     {"Приветствие", animations.model.actionWave},
     {"Указать на место", animations.model.actionPointUp},
-    {"Осмотр предмета", animations.model.actionInspectItem},
+    {"Скрестить руки", animations.model.actionCrossArms},
     {'Жест "Дай пять"', animations.model.actionHighFiveBegin},
     {'Танец "Руки вверх"', animations.model.actionDanceHandsUp},
-    {"Скрестить руки", animations.model.actionCrossArms},
+    {'Танец "Удар казачка"', animations.model.actionKazotskyKick},
     {"Задумался", animations.model.actionThinking},
     {"Отряхнулся", animations.model.actionShakeOff},
-    {"Руки на поясе", animations.model.actionBeltHands}
+    {"Руки на поясе", animations.model.actionBeltHands},
+    {"Развёл руки", animations.model.actionThrowsUpHands},
+    {"Пожал плечами", animations.model.actionShrug},
+    {"Осмотр предмета", animations.model.actionInspectItem}
 }
 actionButtonCommonColor = "§3"
 actionButtonAccentColor = "§f"
@@ -60,6 +62,7 @@ blendEmotionAnimations(2.5)
 
 
 
+
 require("libraries.SCSys")
 capesList = {
     {"Без плаща", "assets.capes.cape_default", "assets.icons.capeDefault"},
@@ -68,7 +71,9 @@ capesList = {
     {"Purple Heart", "assets.capes.Purple Heart", "assets.icons.capePurpleHeart"},
     {"MCC 15th Year", "assets.capes.MCC 15th Year", "assets.icons.capeMCC15thYear"},
     {"Mojang Studios", "assets.capes.Mojang Studios", "assets.icons.capeMojangStudios"},
-    {"Mojang Office", "assets.capes.Mojang Office", "assets.icons.capeMojangOffice"}
+    {"Mojang Office", "assets.capes.Mojang Office", "assets.icons.capeMojangOffice"},
+    {"Home", "assets.capes.Home", "assets.icons.capeHome"},
+    {"Menace", "assets.capes.Menace", "assets.icons.capeMenace"}
 }
 capeModelParts = {
     models.model.root.Body.Cape,
@@ -168,3 +173,19 @@ function events.render(delta)
         end
     end
 end
+
+--[[
+    Горячие клавиши
+]]--
+keybinds:newKeybind("Остановить действие/эмоции", "key.keyboard.keypad.0", false):onPress(function ()
+    pings.stopAction()
+end)
+keybinds:newKeybind(actionsList[1][1], "key.keyboard.keypad.1", false):onPress(function ()
+    pings.playAction(1)
+end)
+keybinds:newKeybind(actionsList[2][1], "key.keyboard.keypad.2", false):onPress(function ()
+    pings.playAction(2)
+end)
+keybinds:newKeybind(actionsList[3][1], "key.keyboard.keypad.3", false):onPress(function ()
+    pings.playExpression(3)
+end)

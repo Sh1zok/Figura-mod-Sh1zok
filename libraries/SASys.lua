@@ -30,6 +30,7 @@ function stopAllActions()
     activeAction = {"Нет", nil}
 end
 
+
 -- Функция для задания приоритетов анимациям действий
 function prioritizeActionAnimations(priorityValue)
     for _, action in ipairs(actionsList) do
@@ -59,6 +60,8 @@ function blendActionAnimations(blendValue)
         end
     end
 end
+
+
 
 -- Функция формирующая титул кнопки
 function updateActionButtonTitle()
