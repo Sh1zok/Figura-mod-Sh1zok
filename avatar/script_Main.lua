@@ -27,6 +27,34 @@ action_wheel:setPage(mainPage) -- Задание активной страниц
 
 nameplate.Entity:setPos(0, 0.1, 0) -- Высота панели никнейма
 
+function pings.changeSkin(textureName) -- Смена текстуры кожи на заданную
+    models.model.root.Body.Body:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.Head.Head:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.Head.HeadSecond:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.Head.Face:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.LeftArm.LeftArmTop:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.LeftArm.LeftABottom.LeftArmBottom:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.RightArm.RightArmTop:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.Body.RightArm.RightABottom.RightArmBottom:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.LeftLeg.LeftLegTop:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.LeftLeg.LeftLBottom.LeftLegBottom:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.RightLeg.RightLegTop:setPrimaryTexture("Custom", textures[textureName])
+    models.model.root.RightLeg.RightLBottom.RightLegBottom:setPrimaryTexture("Custom", textures[textureName])
+
+    models.model.root.Body.Head.Face.Mouth:setPrimaryTexture("Custom", textures["assets.mouth." .. currentMouth])
+end
+
+function pings.setArmorVisibility() -- Устанавливает видимость брони
+    vanilla_model.ARMOR:setVisible(config:load("armorVisibility"))
+end
+
+function pings.setNameplateVisibility() -- Устанавливает видимость никнейма
+    nameplate.Entity:setVisible(config:load("nameplateVisibility"))
+end
+
+pings.setArmorVisibility()
+pings.setNameplateVisibility()
+
 
 
 --[[
@@ -35,8 +63,8 @@ nameplate.Entity:setPos(0, 0.1, 0) -- Высота панели никнейма
 -- SquAPI
 local squapi = require("libraries.SquAPI") -- Подключение SquAPI
 squapi.smoothHead:new({models.model.root.Body.Head, models.model.root.Body}, {0.45, 0.3}, nil, 1, false) -- Гладкий поворот головы
-squapi.eye:new(models.model.root.Body.Head.Face.Pupils.LeftPupil, 0.0625, 0.175, 0.25, 0.25) -- Настройка левого глаза
-squapi.eye:new(models.model.root.Body.Head.Face.Pupils.RightPupil, 0.175, 0.0625, 0.25, 0.25) -- -- Настройка правого глаза
+squapi.eye:new(models.model.root.Body.Head.Face.Pupils.LeftPupil, 0.125, 0.175, 0.25, 0.25) -- Настройка левого глаза
+squapi.eye:new(models.model.root.Body.Head.Face.Pupils.RightPupil, 0.175, 0.125, 0.25, 0.25) -- -- Настройка правого глаза
 squapi.randimation:new(animations.model.blink, 60, true) -- Настройка анимации моргания
 
 -- Настройка анимаций
@@ -85,31 +113,33 @@ end
 --[[
     Остальное
 ]]--
-function events.render() -- Определение момента показа рук
-    if player:getHeldItem(false).id == "minecraft:air" then -- Основная рука должна быть показана
-        if player:isLeftHanded() then -- Основная рука - левая
-            renderer:setRenderLeftArm(true)
-        else -- Основная рука - правая
-            renderer:setRenderRightArm(true)
+if host:isHost() then
+    function events.render() -- Определение момента показа рук
+        if player:getHeldItem(false).id == "minecraft:air" then -- Основная рука должна быть показана
+            if player:isLeftHanded() then -- Основная рука - левая
+                renderer:setRenderLeftArm(true)
+            else -- Основная рука - правая
+                renderer:setRenderRightArm(true)
+            end
+        else -- Основная рука должна быть спрятана
+            if player:isLeftHanded() then -- Основная рука - левая
+                renderer:setRenderLeftArm(false)
+            else -- Основная рука правая
+                renderer:setRenderRightArm(false)
+            end
         end
-    else -- Основная рука должна быть спрятана
-        if player:isLeftHanded() then -- Основная рука - левая
-            renderer:setRenderLeftArm(false)
-        else -- Основная рука правая
-            renderer:setRenderRightArm(false)
-        end
-    end
-    if player:getHeldItem(true).id == "minecraft:air" then -- Дополнительная рука должна быть показана
-        if player:isLeftHanded() then -- Основная рука - левая
-            renderer:setRenderRightArm(true)
-        else -- Основная рука - правая
-            renderer:setRenderLeftArm(true)
-        end
-    else -- Дополнительная рука должна быть спрятана
-        if player:isLeftHanded() then -- Основная рука - левая
-            renderer:setRenderRightArm(false)
-        else -- Основная рука - правая
-            renderer:setRenderLeftArm(false)
+        if player:getHeldItem(true).id == "minecraft:air" then -- Дополнительная рука должна быть показана
+            if player:isLeftHanded() then -- Основная рука - левая
+                renderer:setRenderRightArm(true)
+            else -- Основная рука - правая
+                renderer:setRenderLeftArm(true)
+            end
+        else -- Дополнительная рука должна быть спрятана
+            if player:isLeftHanded() then -- Основная рука - левая
+                renderer:setRenderRightArm(false)
+            else -- Основная рука - правая
+                renderer:setRenderLeftArm(false)
+            end
         end
     end
 end

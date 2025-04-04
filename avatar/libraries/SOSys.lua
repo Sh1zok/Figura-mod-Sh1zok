@@ -1,7 +1,7 @@
 --[[
     ■■■■
     ■  ■ Sh1zok's Outfits System
-    ■■■  v1.5
+    ■■■  v1.6
 ]]--
 
 
@@ -39,6 +39,17 @@ end
 -- Функция возвращающая текстуру кнопки
 function updateOutfitButtonTexture()
     return(textures[outfitsList[currentOutfit][3]])
+end
+
+-- Функция синхронизирующая наряды с конфигом
+function getOutfitFromConfig()
+    currentOutfit = config:load("SOSys_outfit")
+
+    if currentOutfit == nil then
+        currentOutfit = 1
+    end
+
+    pings.setOutfit(outfitsList[currentOutfit][2], outfitsList[currentOutfit][4], outfitsList[currentOutfit][5])
 end
 
 
@@ -83,5 +94,7 @@ function outfitButtonSelect(dir)
         end
     end
 
+    config:save("SOSys_outfit", currentOutfit)
+    
     pings.setOutfit(outfitsList[currentOutfit][2], outfitsList[currentOutfit][4], outfitsList[currentOutfit][5])
 end

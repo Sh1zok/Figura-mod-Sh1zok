@@ -95,9 +95,10 @@ settingToggleNameplateVisibility = settingsPage:newAction() -- При нажат
     :hoverColor(1, 1, 1)
     :item("minecraft:book")
     :toggleItem("minecraft:enchanted_book")
-    :toggled(true)
+    :toggled(config:load("nameplateVisibility"))
     :onToggle(function()
-        pings.nameplateVisibility(settingToggleNameplateVisibility:isToggled())
+        config:save("nameplateVisibility", settingToggleNameplateVisibility:isToggled())
+        pings.setNameplateVisibility(settingToggleNameplateVisibility:isToggled())
         if settingToggleNameplateVisibility:isToggled() then
             sounds:playSound("block.beacon.activate", player:getPos())
         else
@@ -112,9 +113,10 @@ settingToggleArmorVisibility = settingsPage:newAction() -- При нажатии
     :hoverColor(1, 1, 1)
     :item("minecraft:chainmail_chestplate")
     :toggleItem("minecraft:netherite_chestplate")
-    :toggled(true)
+    :toggled(config:load("armorVisibility"))
     :onToggle(function()
-        pings.armorVisibility(settingToggleArmorVisibility:isToggled())
+        config:save("armorVisibility", settingToggleArmorVisibility:isToggled())
+        pings.setArmorVisibility()
         if settingToggleArmorVisibility:isToggled() then
             sounds:playSound("block.beacon.activate", player:getPos())
         else

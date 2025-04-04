@@ -1,7 +1,7 @@
 --[[
     ■■■■
     ■  ■ Sh1zok's Capes System
-    ■■■  v1.5
+    ■■■  v1.6
 ]]--
 
 
@@ -39,6 +39,16 @@ function updateCapeButtonTexture()
     return(textures[capesList[currentCape][3]])
 end
 
+-- Функция синхронизирующая наряды с конфигом
+function getCapeFromConfig()
+    currentCape = config:load("SCSys_cape")
+
+    if currentCape == nil then
+        currentCape = 1
+    end
+
+    pings.setCape(capesList[currentCape][2])
+end
 
 
 --[[
@@ -70,6 +80,8 @@ function capeButtonSelect(dir)
             currentCape = #capesList
         end
     end
+
+    config:save("SCSys_cape", currentCape)
 
     pings.setCape(capesList[currentCape][2])
 end

@@ -32,7 +32,8 @@ actionsList = {
     {"Руки на поясе", animations.model.actionBeltHands},
     {"Развёл руки", animations.model.actionThrowsUpHands},
     {"Пожал плечами", animations.model.actionShrug},
-    {"Осмотр предмета", animations.model.actionInspectItem}
+    {"Осмотр предмета", animations.model.actionInspectItem},
+    {"Руки за спиной", animations.model.actionHandsBehindBack}
 }
 actionButtonCommonColor = "§3"
 actionButtonAccentColor = "§f"
@@ -52,7 +53,8 @@ emotionsList = {
     {"Печаль", animations.model.emotionSad},
     {"Интерес", animations.model.emotionInterested},
     {"Сумасшедший", animations.model.emotionCrazy},
-    {"Шок", animations.model.emotionScared}
+    {"Шок", animations.model.emotionScared},
+    {"Рассматривает", animations.model.emotionCloserLook}
 }
 emotionButtonCommonColor = "§3"
 emotionButtonAccentColor = "§f"
@@ -83,6 +85,7 @@ capeButtonCommonColor = "§3"
 capeButtonAccentColor = "§f"
 capeButtonTitle = "Плащ"
 capeButtonDescription = "Прокручивание вниз: Следующий плащ\n Прокручивание вверх: Предыдущий плащ\n\n Список плащей:\n"
+getCapeFromConfig()
 
 
 
@@ -97,7 +100,8 @@ outfitsList = {
     {'"Детектив"', "assets.outfits.detective", "assets.icons.detectiveOutfitIcon", 0, false},
     {"Оффициальный белый", "assets.outfits.officialWhite", "assets.icons.officialWhiteOutfitIcon", 0, true},
     {"Оффициальный чёрный", "assets.outfits.officialBlack", "assets.icons.officialBlackOutfitIcon", 0, true},
-    {"Садовый", "assets.outfits.gardenGreen", "assets.icons.gardenGreenOutfitIcon", 0, true}
+    {"Садовый", "assets.outfits.gardenGreen", "assets.icons.gardenGreenOutfitIcon", 0, true},
+    {"Мафия", "assets.outfits.mafia", "assets.icons.mafiaOutfitIcon", 0.5, false}
 }
 outfitModelParts = {
     models.model.root.Body.Outfit,
@@ -132,6 +136,7 @@ outfitButtonCommonColor = "§3"
 outfitButtonAccentColor = "§f"
 outfitButtonTitle = "Наряд"
 outfitButtonDescription = "Прокручивание вниз: Следующий наряд\n Прокручивание вверх: Предыдущий наряд\n\n Список нарядов:\n"
+getOutfitFromConfig()
 
 
 
@@ -187,5 +192,5 @@ keybinds:newKeybind(actionsList[2][1], "key.keyboard.keypad.2", false):onPress(f
     pings.playAction(2)
 end)
 keybinds:newKeybind(actionsList[3][1], "key.keyboard.keypad.3", false):onPress(function ()
-    pings.playExpression(3)
+    pings.playAction(3)
 end)

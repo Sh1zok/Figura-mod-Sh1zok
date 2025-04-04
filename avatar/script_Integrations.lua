@@ -1,15 +1,16 @@
 --[[
     Функции
 ]]--
-local function processPCM(pcm) -- Вычисление громкости голоса для FiguraSVC
-    local averageAmplitude = 0
-    for i = 1, #pcm do
-        averageAmplitude = averageAmplitude + math.abs(pcm[i])
-    end
-    averageAmplitude = averageAmplitude / #pcm
+function getVoiceLevel(voiceList) -- Вычисление громкости голоса для FiguraSVC
+    averageVL = 0
 
-    return averageAmplitude
+    for i = 1, #voiceList do
+        averageVL = averageVL + math.abs(voiceList[i])
+    end
+
+    return math.floor(averageVL / (#voiceList * 100))
 end
+
 function pings.changeMouth(texture) -- Смена текстуры рта на заданную
     models.model.root.Body.Head.Face.Mouth:setPrimaryTexture("Custom", textures["assets.mouth." .. texture])
 end
@@ -51,8 +52,8 @@ if client:isModLoaded("figurasvc") and host:isHost() then
     isMouthShouldChange = true
 
     events["svc.microphone"] = function(pcm)
-        voiceLevel = (math.floor(processPCM(pcm)) / 100) + voiceLevelModifier
-
+        voiceLevel = getVoiceLevel(pcm) + (voiceLevelModifier * 4)
+        
         if voiceLevel < 2 then
             currentMouth = "0"
         elseif voiceLevel > 2 and voiceLevel < 4 then
