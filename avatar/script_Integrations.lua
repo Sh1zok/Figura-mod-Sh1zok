@@ -121,3 +121,14 @@ if client:isModLoaded("vc_gliders") then
         end
     end
 end
+
+-- Valhelsia Furniture
+if client:isModLoaded("valhelsia_furniture") then
+    function events.tick()
+        if animations.model.sitting:isPlaying() then
+            models.model.root:setPos(0, 4, 0)
+        else
+            models.model.root:setPos(0, 0, 0)
+        end
+    end
+end

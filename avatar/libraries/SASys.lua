@@ -1,7 +1,7 @@
 --[[
     ■■■■
     ■  ■ Sh1zok's Actions System
-    ■■■  v2.1
+    ■■■  v2.2
 ]]--
 
 
@@ -16,7 +16,7 @@ actionButtonAccentColor = "§f"
 actionButtonTitle = "Action"
 actionButtonDescription = "Scroll down: Next action\n Scroll up: Previous action\n LMB: Play action\n RMB: Stop action\n\n Actions list:\n"
 local selectedAction = 1 -- Выбор действия
-activeAction = {"Нет", nil} -- Активное действие
+activeAction = {"Нет", nil, 0, true} -- Активное действие
 actionsListDescriptionSize = 5
 
 -- Функция для остоновки всех действий
@@ -27,17 +27,7 @@ function stopAllActions()
         end
     end
 
-    activeAction = {"Нет", nil}
-end
-
-
--- Функция для задания приоритетов анимациям действий
-function prioritizeActionAnimations(priorityValue)
-    for _, action in ipairs(actionsList) do
-        if action[2] ~= nil then
-            action[2]:setPriority(priorityValue)
-        end
-    end
+    activeAction = {"Нет", nil, 0, true}
 end
 
 -- Функция для задания интерполяции анимаций действий если среди библиотек есть GSAnimBlend
@@ -96,9 +86,11 @@ end
 
 -- Проверяем каждый тик проигрывание несовместимых с действиями анимациями
 function events.tick()
-    for _, value in ipairs(stopingAnimsList) do
-        if value:isPlaying() then
-            stopAllActions()
+    if activeAction[4] == false then
+        for _, value in ipairs(stopingAnimsList) do
+            if value:isPlaying() then
+                stopAllActions()
+            end
         end
     end
 end
@@ -116,6 +108,7 @@ function pings.playAction(selection)
 
     if activeAction[2] ~= nil then
         activeAction[2]:play() -- Проигрывание активного действия
+        activeAction[2]:setPriority(activeAction[3])
     end
 end
 

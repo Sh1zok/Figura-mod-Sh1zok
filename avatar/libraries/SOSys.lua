@@ -17,7 +17,7 @@ outfitButtonCommonColor = ""
 outfitButtonAccentColor = ""
 outfitButtonTitle = ""
 outfitButtonDescription = ""
-local currentOutfit = 1
+currentOutfit = 1
 
 -- Функция формирующая титул кнопки
 function updateOutfitButtonTitle()

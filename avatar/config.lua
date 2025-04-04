@@ -18,43 +18,43 @@ stopingAnimsList = {
     animations.model.elytra,
     animations.model.crawling,
     animations.model.swimming,
-    animations.model.sleeping
+    animations.model.sleeping,
+    animations.model.sprinting
 }
 actionsList = {
-    {"Приветствие", animations.model.actionWave},
-    {"Указать на место", animations.model.actionPointUp},
-    {"Скрестить руки", animations.model.actionCrossArms},
-    {'Жест "Дай пять"', animations.model.actionHighFiveBegin},
-    {'Танец "Руки вверх"', animations.model.actionDanceHandsUp},
-    {'Танец "Удар казачка"', animations.model.actionKazotskyKick},
-    {"Задумался", animations.model.actionThinking},
-    {"Отряхнулся", animations.model.actionShakeOff},
-    {"Руки на поясе", animations.model.actionBeltHands},
-    {"Развёл руки", animations.model.actionThrowsUpHands},
-    {"Пожал плечами", animations.model.actionShrug},
-    {"Осмотр предмета", animations.model.actionInspectItem},
-    {"Руки за спиной", animations.model.actionHandsBehindBack}
+    {"Приветствие", animations.model.actionWave, 3, false},
+    {"Указать на место", animations.model.actionPointUp, 3, true},
+    {'Жест "Дай пять"', animations.model.actionHighFiveBegin, 3, false},
+    {"Осмотр предмета", animations.model.actionInspectItem, 3, false},
+    {"Скрестить руки", animations.model.actionCrossArms, 3, false},
+    {"Руки за спиной", animations.model.actionHandsBehindBack, 3, false},
+    {"Руки на поясе", animations.model.actionBeltHands, 3, false},
+    {'Танец "Руки вверх"', animations.model.actionDanceHandsUp, 3, false},
+    {'Танец "Удар казачка"', animations.model.actionKazotskyKick, 3, true},
+    {"Задумался", animations.model.actionThinking, 3, false},
+    {"Отряхнулся", animations.model.actionShakeOff, 3, false},
+    {"Развёл руки", animations.model.actionThrowsUpHands, 3, false},
+    {"Пожал плечами", animations.model.actionShrug, 3, false},
+    {"Снять шляпу", animations.model.actionTakeOffHat, 0, true}
 }
 actionButtonCommonColor = "§3"
 actionButtonAccentColor = "§f"
 actionButtonTitle = "Действие"
 actionButtonDescription = "Прокручивание вниз: Следующее действие\n Прокручивание вверх: Предыдущее действие\n ЛКМ: Выбрать действие\n ПКМ: Остановить действие\n\n Список действий:\n"
 actionsListDescriptionSize = 5
-prioritizeActionAnimations(3)
 blendActionAnimations(7.5)
 
 
 
 require("libraries.SESys")
 emotionsList = {
-    {"Улыбка", animations.model.emotionHappy},
-    {"Скептик", animations.model.emotionSceptic},
-    {"Задумался", animations.model.emotionThinking},
-    {"Печаль", animations.model.emotionSad},
     {"Интерес", animations.model.emotionInterested},
+    {"Задумался", animations.model.emotionThinking},
+    {"Скептик", animations.model.emotionSceptic},
+    {"Улыбка", animations.model.emotionHappy},
+    {"Печаль", animations.model.emotionSad},
     {"Сумасшедший", animations.model.emotionCrazy},
-    {"Шок", animations.model.emotionScared},
-    {"Рассматривает", animations.model.emotionCloserLook}
+    {"Шок", animations.model.emotionScared}
 }
 emotionButtonCommonColor = "§3"
 emotionButtonAccentColor = "§f"
@@ -106,9 +106,7 @@ outfitsList = {
 outfitModelParts = {
     models.model.root.Body.Outfit,
     models.model.root.Body.OutfitSecond,
-    models.model.root.Body.Head.Outfit,
-    models.model.root.Body.Head.OutfitSecond,
-    models.model.root.Body.Head.OutfitThird,
+    models.model.root.Body.Head.Hat,
     models.model.root.Body.LeftArm.Outfit,
     models.model.root.Body.LeftArm.OutfitSecond,
     models.model.root.Body.LeftArm.LeftABottom.Outfit,
@@ -127,9 +125,7 @@ outfitModelParts = {
     models.model.root.RightLeg.RightLBottom.OutfitSecond
 }
 hatModelParts = {
-    models.model.root.Body.Head.Outfit,
-    models.model.root.Body.Head.OutfitSecond,
-    models.model.root.Body.Head.OutfitThird
+    models.model.root.Body.Head.Hat
 }
 headSecondLayerModelPart = models.model.root.Body.Head.HeadSecond
 outfitButtonCommonColor = "§3"
@@ -148,17 +144,16 @@ local highFiveCheck = false
 
 
 --[[
-    Специальные действия, функции
+    Специальные действия
 ]]--
 function events.render()
     if activeAction[1] == "Указать на место" then
-        models.model.root.Body.RightArm:setRot((vanilla_model.HEAD:getOriginRot() + 180) % 360 - 180)
+        models.model.root.Body.LeftArm:setRot((vanilla_model.HEAD:getOriginRot() + 180) % 360 - 1800)
+        models.model.root.Body.LeftArm:setRot(models.model.root.Body.LeftArm:getRot().x, -1 * models.model.root.Body.LeftArm:getRot().y, models.model.root.Body.LeftArm:getRot().z)
     else
-        models.model.root.Body.RightArm:setRot(0, 0, 0)
+        models.model.root.Body.LeftArm:setRot(0, 0, -2.5)
     end
-end
 
-function events.render(delta)
     if activeAction[1] == 'Жест "Дай пять"' then
         local hand_pos = models.model.root.Body.RightArm.RightABottom.RightItemPivot:partToWorldMatrix():apply()
         for _, player in pairs(world:getPlayers()) do
@@ -177,20 +172,49 @@ function events.render(delta)
             highFiveCheck = false
         end
     end
+
+    if activeAction[1] == "Снять шляпу" then
+        models.model.root.Body.Head.HeadSecond:setVisible(true)
+    else
+        headSecondLayerModelPart:setVisible(outfitsList[currentOutfit][5])
+    end
 end
 
 --[[
     Горячие клавиши
 ]]--
-keybinds:newKeybind("Остановить действие/эмоции", "key.keyboard.keypad.0", false):onPress(function ()
-    pings.stopAction()
+keybinds:newKeybind("Предыдущий наряд", "key.keyboard.up"):onPress(function ()
+    outfitButtonSelect(1)
+    outfits:title(updateOutfitButtonTitle())
+    outfits:setTexture(updateOutfitButtonTexture())
 end)
-keybinds:newKeybind(actionsList[1][1], "key.keyboard.keypad.1", false):onPress(function ()
+keybinds:newKeybind("Следующий наряд", "key.keyboard.down"):onPress(function ()
+    outfitButtonSelect(-1)
+    outfits:title(updateOutfitButtonTitle())
+    outfits:setTexture(updateOutfitButtonTexture())
+end)
+keybinds:newKeybind("Остановить действие/эмоции", "key.keyboard.keypad.0"):onPress(function ()
+    pings.stopAction()
+    pings.stopEmotion()
+end)
+keybinds:newKeybind(actionsList[1][1], "key.keyboard.keypad.1"):onPress(function ()
     pings.playAction(1)
 end)
-keybinds:newKeybind(actionsList[2][1], "key.keyboard.keypad.2", false):onPress(function ()
+keybinds:newKeybind(actionsList[2][1], "key.keyboard.keypad.2"):onPress(function ()
     pings.playAction(2)
 end)
-keybinds:newKeybind(actionsList[3][1], "key.keyboard.keypad.3", false):onPress(function ()
-    pings.playAction(3)
+keybinds:newKeybind(actionsList[5][1], "key.keyboard.keypad.3"):onPress(function ()
+    pings.playAction(5)
 end)
+keybinds:newKeybind(actionsList[6][1], "key.keyboard.keypad.4"):onPress(function ()
+    pings.playAction(6)
+end)
+keybinds:newKeybind(actionsList[14][1], "key.keyboard.keypad.8"):onPress(function ()
+    pings.playAction(14)
+end)
+keybinds:newKeybind(actionsList[9][1], "key.keyboard.keypad.9"):onPress(function ()
+    pings.playAction(9)
+end)
+
+
+
