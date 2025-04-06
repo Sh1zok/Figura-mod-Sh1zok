@@ -21,7 +21,7 @@ end
     Интеграции
 ]]--
 -- PlasmoVoice
-if client:isModLoaded("figextra") then
+if client:isModLoaded("figextra") and host:isHost() then
     previousMouth = "0"
     currentMouth = "0"
     voiceLevelModifier = 0
@@ -69,7 +69,7 @@ if client:isModLoaded("figurasvc") and host:isHost() then
 end
 
 -- FigExtra или FiguraSVC
-if client:isModLoaded("figextra") or client:isModLoaded("figurasvc") then
+if (client:isModLoaded("figextra") or client:isModLoaded("figurasvc")) and host:isHost() then
     settingVoiceLevelModifier = settingsPage:newAction()
         :title("Прибавка к чувствительности голоса: 0§7\n Колёсико мыши вверх: +0.1\n Колёсико мыши вниз: -0.1\n ЛКМ: Сброс")
         :item("minecraft:silence_armor_trim_smithing_template")

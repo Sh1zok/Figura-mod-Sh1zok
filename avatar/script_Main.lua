@@ -1,11 +1,4 @@
---[[
-    Переменные
-]]--
-local previousSkin = "assets.clear_skin"
-local currentSkin = "assets.clear_skin"
-
-
-
+------------------------------------------------- EVENTS https://figura-wiki.pages.dev/globals/Events/Event
 --[[
     Инициализация
 ]]--
@@ -25,35 +18,21 @@ mainPage = action_wheel:newPage()
 settingsPage = action_wheel:newPage()
 action_wheel:setPage(mainPage) -- Задание активной страницы
 
-nameplate.Entity:setPos(0, 0.1, 0) -- Высота панели никнейма
+nameplate.Entity:setPos(0, 0.2, 0) -- Высота панели никнейма
+nameplate.Entity:setOutline(true) -- Обводка никнейма
+nameplate.Entity:setOutlineColor(0, 0.75, 0.75) -- Цвет обводки
+nameplate.Entity:setBackgroundColor(0, 0, 0, 0) -- Фон никнейма
 
-function pings.changeSkin(textureName) -- Смена текстуры кожи на заданную
-    models.model.root.Body.Body:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.Head:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.HeadSecond:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.Head.Face:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.LeftArm.LeftArmTop:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.LeftArm.LeftABottom.LeftArmBottom:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.RightArm.RightArmTop:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.Body.RightArm.RightABottom.RightArmBottom:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.LeftLeg.LeftLegTop:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.LeftLeg.LeftLBottom.LeftLegBottom:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.RightLeg.RightLegTop:setPrimaryTexture("Custom", textures[textureName])
-    models.model.root.RightLeg.RightLBottom.RightLegBottom:setPrimaryTexture("Custom", textures[textureName])
-
-    models.model.root.Body.Head.Face.Mouth:setPrimaryTexture("Custom", textures["assets.mouth." .. currentMouth])
+function pings.setArmorVisibility(value) -- Устанавливает видимость брони
+    vanilla_model.ARMOR:setVisible(value)
 end
 
-function pings.setArmorVisibility() -- Устанавливает видимость брони
-    vanilla_model.ARMOR:setVisible(config:load("armorVisibility"))
+function pings.setNameplateVisibility(value) -- Устанавливает видимость никнейма
+    nameplate.Entity:setVisible(value)
 end
 
-function pings.setNameplateVisibility() -- Устанавливает видимость никнейма
-    nameplate.Entity:setVisible(config:load("nameplateVisibility"))
-end
-
-pings.setArmorVisibility()
-pings.setNameplateVisibility()
+pings.setArmorVisibility(config:load("armorVisibility"))
+pings.setNameplateVisibility(config:load("nameplateVisibility"))
 
 
 
@@ -141,21 +120,5 @@ if host:isHost() then
                 renderer:setRenderLeftArm(false)
             end
         end
-    end
-end
-
-function events.tick() -- Смена текстуры кожи в соответствии с здоровьем игрока
-    if player:getHealth() > 15 then
-        currentSkin = "assets.clear_skin"
-    elseif player:getHealth() <= 15 and player:getHealth() > 10 then
-        currentSkin = "assets.a_little_damaged"
-    elseif player:getHealth() <= 10 and player:getHealth() > 5 then
-        currentSkin = "assets.damaged"
-    elseif player:getHealth() <= 5 then
-        currentSkin = "assets.badly_damaged"
-    end
-    if previousSkin ~= currentSkin then
-        pings.changeSkin(currentSkin)
-        previousSkin = currentSkin
     end
 end

@@ -99,6 +99,7 @@ settingToggleNameplateVisibility = settingsPage:newAction() -- При нажат
     :onToggle(function()
         config:save("nameplateVisibility", settingToggleNameplateVisibility:isToggled())
         pings.setNameplateVisibility(settingToggleNameplateVisibility:isToggled())
+
         if settingToggleNameplateVisibility:isToggled() then
             sounds:playSound("block.beacon.activate", player:getPos())
         else
@@ -116,7 +117,8 @@ settingToggleArmorVisibility = settingsPage:newAction() -- При нажатии
     :toggled(config:load("armorVisibility"))
     :onToggle(function()
         config:save("armorVisibility", settingToggleArmorVisibility:isToggled())
-        pings.setArmorVisibility()
+        pings.setArmorVisibility(settingToggleArmorVisibility:isToggled())
+        
         if settingToggleArmorVisibility:isToggled() then
             sounds:playSound("block.beacon.activate", player:getPos())
         else

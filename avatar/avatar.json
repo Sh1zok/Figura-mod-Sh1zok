@@ -8,7 +8,7 @@
     "libraries.EZAnims",
     "libraries.GSAnimBlend",
     "libraries.SquAssets",
-    "config",
+    "script_config",
     "script_Main",
     "script_ActionWheel",
     "script_Integrations"

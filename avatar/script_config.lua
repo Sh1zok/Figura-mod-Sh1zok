@@ -93,8 +93,7 @@ require("libraries.SOSys")
 outfitsList = {
     {"Классический", "assets.outfits.classic", "assets.icons.classicOutfitIcon", 0, true},
     {"Повседневный 1", "assets.outfits.everyday1", "assets.icons.everyday1OutfitIcon", 0, true},
-    {"Современный 1", "assets.outfits.sh1zok", "assets.icons.sh1zokOutfitIcon", 0, true},
-    {"Современный 2", "assets.outfits.modern", "assets.icons.modernOutfitIcon", 1, false},
+    {"Современный", "assets.outfits.modern", "assets.icons.modernOutfitIcon", 1, false},
     {"Пиратский", "assets.outfits.pirate", "assets.icons.pirateOutfitIcon", 1, false},
     {"Зимний", "assets.outfits.winter", "assets.icons.winterOutfitIcon", 1, false},
     {'"Детектив"', "assets.outfits.detective", "assets.icons.detectiveOutfitIcon", 0, false},
@@ -104,25 +103,19 @@ outfitsList = {
     {"Мафия", "assets.outfits.mafia", "assets.icons.mafiaOutfitIcon", 0.5, false}
 }
 outfitModelParts = {
-    models.model.root.Body.Outfit,
-    models.model.root.Body.OutfitSecond,
+    models.model.root.Body.Body,
+    models.model.root.Body.BodySecond,
+    models.model.root.Body.Head.Head,
+    models.model.root.Body.Head.HeadSecond,
     models.model.root.Body.Head.Hat,
-    models.model.root.Body.LeftArm.Outfit,
-    models.model.root.Body.LeftArm.OutfitSecond,
-    models.model.root.Body.LeftArm.LeftABottom.Outfit,
-    models.model.root.Body.LeftArm.LeftABottom.OutfitSecond,
-    models.model.root.Body.RightArm.Outfit,
-    models.model.root.Body.RightArm.OutfitSecond,
-    models.model.root.Body.RightArm.RightABottom.Outfit,
-    models.model.root.Body.RightArm.RightABottom.OutfitSecond,
-    models.model.root.LeftLeg.Outfit,
-    models.model.root.LeftLeg.OutfitSecond,
-    models.model.root.LeftLeg.LeftLBottom.Outfit,
-    models.model.root.LeftLeg.LeftLBottom.OutfitSecond,
-    models.model.root.RightLeg.Outfit,
-    models.model.root.RightLeg.OutfitSecond,
-    models.model.root.RightLeg.RightLBottom.Outfit,
-    models.model.root.RightLeg.RightLBottom.OutfitSecond
+    models.model.root.Body.Head.Face.FaceMask,
+    models.model.root.Body.Head.Face.Brows,
+    models.model.root.Body.Head.Face.Eyelids,
+    models.model.root.Body.Head.Face.Pupils,
+    models.model.root.Body.LeftArm,
+    models.model.root.Body.RightArm,
+    models.model.root.LeftLeg,
+    models.model.root.RightLeg
 }
 hatModelParts = {
     models.model.root.Body.Head.Hat
@@ -155,7 +148,7 @@ function events.render()
     end
 
     if activeAction[1] == 'Жест "Дай пять"' then
-        local hand_pos = models.model.root.Body.RightArm.RightABottom.RightItemPivot:partToWorldMatrix():apply()
+        local hand_pos = models.model.root.Body.RightArm.RA_BottomPart.RightItemPivot:partToWorldMatrix():apply()
         for _, player in pairs(world:getPlayers()) do
             local pos = player:getPos(delta) + vec(0, player:getEyeHeight(delta), 0)
             local dist = (hand_pos - pos):length()
